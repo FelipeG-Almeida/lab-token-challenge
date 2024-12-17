@@ -10,7 +10,7 @@ export const signupSchema = z
     .object({
         name: z
             .string()
-            .min(6, { message: 'O nome deve conter no mínimo 2 caracteres' }),
+            .min(6, { message: 'O nome deve conter no mínimo 6 caracteres' }),
         email: z.string().email({ message: 'Email inválido' }),
         password: z
             .string()

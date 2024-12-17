@@ -3,6 +3,13 @@ export interface TokenPayload {
     name: string;
 }
 
+export interface userDB {
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+}
+
 export class User {
     constructor(
         private id: string,

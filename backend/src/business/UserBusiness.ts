@@ -56,15 +56,15 @@ export class UserBusiness {
 
         const isPasswordCorrect = await this.hashManager.compare(
             password,
-            user.getPassword()
+            user.password
         );
         if (!isPasswordCorrect) {
             throw new BadRequestError('Email ou senha incorretos');
         }
 
         const tokenPayload: TokenPayload = {
-            id: user.getId(),
-            name: user.getName(),
+            id: user.id,
+            name: user.name,
         };
         const token = this.tokenManager.createToken(tokenPayload);
 
@@ -72,17 +72,17 @@ export class UserBusiness {
     };
 
     public editUser = async (input: UpdateUserDTO): Promise<void> => {
-        const { name, email, newEmail } = input;
+        const { token, name, email } = input;
 
-        const user = await this.userDatabase.findUserByEmail(email);
-        if (!user) {
-            throw new NotFoundError(
-                `Usuário com email ${email} não encontrado`
-            );
+        const payload = this.tokenManager.getPayload(token);
+        if (!payload) {
+            throw new BadRequestError(`Token inválido`);
         }
+        const user = await this.userDatabase.findUserById(payload.id);
+        const newUser = new User(user.id, user.name, user.email, user.password);
 
-        user.setEmail(newEmail);
-        user.setName(name);
-        await this.userDatabase.updateUser(user.getId(), user);
+        newUser.setEmail(email);
+        newUser.setName(name);
+        await this.userDatabase.updateUser(newUser.getId(), newUser);
     };
 }

@@ -1,19 +1,19 @@
-import { User } from '../models/user';
+import { User, userDB } from '../models/user';
 import { DBManager } from './DBManager';
 
 export class UserDatabase extends DBManager {
     public static TABLE_USERS = 'users';
 
-    public async findUserById(id: string): Promise<User> {
-        const [user]: User[] = await DBManager.connection(
+    public async findUserById(id: string): Promise<userDB> {
+        const [user]: userDB[] = await DBManager.connection(
             UserDatabase.TABLE_USERS
         ).where({ id });
 
         return user;
     }
 
-    public async findUserByEmail(email: string): Promise<User | undefined> {
-        const [user]: User[] = await DBManager.connection(
+    public async findUserByEmail(email: string): Promise<userDB | undefined> {
+        const [user]: userDB[] = await DBManager.connection(
             UserDatabase.TABLE_USERS
         ).where({ email });
         return user;

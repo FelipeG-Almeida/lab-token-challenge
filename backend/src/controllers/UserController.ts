@@ -57,6 +57,7 @@ export class UserController {
     public updateUser = async (req: Request, res: Response) => {
         try {
             const input = updateUserSchema.parse({
+                token: req.headers.authorization,
                 name: req.body.name,
                 email: req.body.email,
                 newEmail: req.body.newEmail,
