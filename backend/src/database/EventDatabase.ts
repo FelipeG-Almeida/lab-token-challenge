@@ -13,21 +13,27 @@ export class EventDatabase extends DBManager {
                 `${EventDatabase.TABLE_EVENTS}.id`,
                 `${EventDatabase.TABLE_GUESTS}.event_id`
             )
+            .leftJoin(
+                'users',
+                `${EventDatabase.TABLE_EVENTS}.creator_id`,
+                `users.id`
+            )
             .select(
                 `${EventDatabase.TABLE_EVENTS}.id`,
                 `${EventDatabase.TABLE_EVENTS}.description`,
                 `${EventDatabase.TABLE_EVENTS}.start_time`,
                 `${EventDatabase.TABLE_EVENTS}.end_time`,
-                `${EventDatabase.TABLE_EVENTS}.creator_id`,
+                'users.name as creator_name',
+                'users.id as creator_id',
                 `${EventDatabase.TABLE_EVENTS}.is_all_day`,
                 DBManager.connection.raw(
-                    `GROUP_CONCAT(
-                    JSON_OBJECT(
-                        'user_id', ${EventDatabase.TABLE_GUESTS}.user_id,
-                        'status', ${EventDatabase.TABLE_GUESTS}.status,
-                        'invited_at', ${EventDatabase.TABLE_GUESTS}.invited_at
-                    )
-                ) as invitedUsers`
+                    `JSON_GROUP_ARRAY(
+                        JSON_OBJECT(
+                            'user_id', ${EventDatabase.TABLE_GUESTS}.user_id,
+                            'status', ${EventDatabase.TABLE_GUESTS}.status,
+                            'invited_at', ${EventDatabase.TABLE_GUESTS}.invited_at
+                        )
+                    ) as invitedUsers`
                 )
             )
             .where(function () {
@@ -37,17 +43,19 @@ export class EventDatabase extends DBManager {
                 ).orWhere(`${EventDatabase.TABLE_GUESTS}.user_id`, userId);
             })
             .groupBy(`${EventDatabase.TABLE_EVENTS}.id`);
-
+    
         return result.map((row) => ({
             id: row.id,
             description: row.description,
             startTime: row.start_time,
             endTime: row.end_time,
+            creatorName: row.creator_name,
             creatorId: row.creator_id,
             isAllDay: row.is_all_day === 1,
-            invitedUsers: row.invitedUsers ? row.invitedUsers.split(',') : [],
+            invitedUsers: row.invitedUsers ? JSON.parse(row.invitedUsers) : [],
         }));
     }
+    
 
     public async insertEvent(newEvent: EventDB): Promise<void> {
         await DBManager.connection(EventDatabase.TABLE_EVENTS).insert(newEvent);

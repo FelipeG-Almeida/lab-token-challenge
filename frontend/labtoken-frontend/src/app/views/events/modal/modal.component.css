@@ -1,0 +1,11 @@
+.modal {
+    display: flex;
+}
+
+.modal-card {
+    width: max(50%, 300px);
+}
+
+.tags {
+    margin-top: 10px;
+}

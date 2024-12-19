@@ -1,0 +1,10 @@
+:host {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+}
+
+form {
+    width: max(50%, 300px);
+}

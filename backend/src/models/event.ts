@@ -4,6 +4,7 @@ export interface EventModel {
     startTime: string;
     endTime: string;
     creatorId: string;
+    creatorName: string;
     isAllDay: boolean;
     invitedUsers: string[];
 }

@@ -1,0 +1,97 @@
+<div class="container is-fluid events">
+    <div class="columns">
+        <div class="column is-11">
+            <h1 class="title">Eventos</h1>
+        </div>
+        <div class="column">
+            <div class="dropdown" [ngClass]="{'is-active': dropDownVisible}">
+                <div class="dropdown-trigger">
+                    <button (click)="openDropdown()" class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span>Perfil</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                        <a class="dropdown-item"> Editar conta </a>
+                        <hr class="dropdown-divider" />
+                        <a (click)="authService.logOut()" class="dropdown-item"> Sair </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <nav class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <button class="button is-success" (click)="openModal()">
+                    <span class="icon">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span>Novo evento</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div class="fixed-grid has-1-cols">
+        <div class="grid">
+            <div *ngFor="let event of events" class="cell">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="avatar">
+                                    {{ event.creatorName.charAt(0) }}
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-4">{{ event.description }}</p>
+                                <p class="subtitle is-6">{{ event.creatorName }}</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <span class="icon-text">
+                                <span class="icon">
+                                    <i class="fas fa-clock"></i>
+                                </span>
+                                <span>{{ formatDate(event.startTime) }}</span>
+                            </span>
+                            <span class="icon-text">
+                                <span class="icon">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <span>Convidados {{ event.invitedUsers.length }}</span>
+                            </span>
+                            <button *ngIf="event.creatorId == userId" (click)="openModal(event)"
+                                class="button is-dark is-small">Editar
+                                evento</button>
+                            <div *ngIf="isInvited(event)" class="control has-icons-left">
+                                <div class="select is-success is-small">
+                                    <select (change)="changeStatus($event, event)">
+                                        <option [selected]="guestStatus(event) === 'CONFIRMED'" value="CONFIRMED">
+                                            Aceitar</option>
+                                        <option [selected]="guestStatus(event) === 'CANCELED'" value="CANCELED">Rejeitar
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="icon is-small is-left">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                            <span *ngIf="guestStatus(event) === 'CONFIRMED'"
+                                class="tag is-medium is-success">Confirmado</span>
+                            <span *ngIf="guestStatus(event) === 'CANCELED'"
+                                class="tag is-medium is-danger">Rejeitado</span>
+                            <span *ngIf="guestStatus(event) === 'PENDING'"
+                                class="tag is-medium is-warning">Pendente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<modal *ngIf="modalVisible" [event]="selectedEvent" (close)="closeModal()" />

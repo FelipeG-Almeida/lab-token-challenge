@@ -1,0 +1,48 @@
+<form [formGroup]="loginForm" class="box">
+    <section class="hero">
+        <div class="hero-body">
+            <p class="title">Lab Eventos</p>
+            <p class="subtitle">Acesse sua conta para continuar</p>
+        </div>
+    </section>
+    <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left has-icons-right">
+            <input [ngClass]="{ 'is-danger': submitted && form['email'].invalid }" class="input" type="email"
+                formControlName="email" placeholder="Email">
+            <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+            </span>
+            <span class="icon is-small is-right">
+                <i class="fas fa-exclamation-triangle"></i>
+            </span>
+        </div>
+        <p *ngIf="submitted && form['email'] && form['email'].errors?.['email']" class="help is-danger">Este email é
+            inválido</p>
+        <p *ngIf="submitted && form['email'] && form['email'].errors?.['required']" class="help is-danger">Insira seu
+            email</p>
+    </div>
+    <div class="field">
+        <label class="label">Senha</label>
+        <p class="control has-icons-left">
+            <input [ngClass]="{ 'is-danger': submitted && form['password'].invalid }" class="input" type="password"
+                placeholder="Senha" formControlName="password">
+            <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+            </span>
+        </p>
+        <p *ngIf="submitted && form['password'] && form['password'].errors?.['required']" class="help is-danger">Insira
+            sua
+            senha</p>
+    </div>
+    <div class="field is-grouped is-grouped-right">
+        <p class="control">
+            <button [routerLink]="'/register'" class="button is-success is-outlined">Criar conta</button>
+        </p>
+        <p class="control">
+            <button class="button is-success" (click)="login()">
+                Login
+            </button>
+        </p>
+    </div>
+</form>

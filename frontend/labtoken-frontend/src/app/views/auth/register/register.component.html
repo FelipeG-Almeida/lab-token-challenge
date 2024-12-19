@@ -1,0 +1,65 @@
+<form [formGroup]="registerForm" class="box">
+    <section class="hero">
+        <div class="hero-body">
+            <p class="title">Lab Eventos</p>
+            <p class="subtitle">Crie sua conta</p>
+        </div>
+    </section>
+    <div class="field">
+        <label class="label">Nome</label>
+        <div class="control">
+            <input [ngClass]="{ 'is-danger': submitted && form['name'].invalid }" class="input" type="text"
+                formControlName="name" placeholder="Nome" />
+        </div>
+        <p *ngIf="submitted && form['name'].errors?.['required']" class="help is-danger">Nome é obrigatório</p>
+        <p *ngIf="submitted && form['name'].errors?.['minlength']" class="help is-danger">Nome deve ter no mínimo 6
+            caracteres</p>
+    </div>
+    <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left">
+            <input [ngClass]="{ 'is-danger': submitted && form['email'].invalid }" class="input" type="email"
+                formControlName="email" placeholder="Email" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+            </span>
+        </div>
+        <p *ngIf="submitted && form['email'].errors?.['email']" class="help is-danger">Email inválido</p>
+        <p *ngIf="submitted && form['email'].errors?.['required']" class="help is-danger">Email é obrigatório</p>
+    </div>
+    <div class="field">
+        <label class="label">Senha</label>
+        <div class="control has-icons-left">
+            <input [ngClass]="{ 'is-danger': submitted && form['password'].invalid }" class="input" type="password"
+                formControlName="password" placeholder="Senha" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+            </span>
+        </div>
+        <p *ngIf="submitted && form['password'].errors?.['required']" class="help is-danger">Senha é obrigatória</p>
+        <p *ngIf="submitted && form['password'].errors?.['minlength']" class="help is-danger">Senha deve ter no mínimo 8
+            caracteres</p>
+    </div>
+    <div class="field">
+        <label class="label">Confirmar Senha</label>
+        <div class="control has-icons-left">
+            <input [ngClass]="{ 'is-danger': submitted && form['confirmPassword'].invalid }" class="input"
+                type="password" formControlName="confirmPassword" placeholder="Confirmar Senha" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+            </span>
+        </div>
+        <p *ngIf="submitted && form['confirmPassword'].errors?.['mustMatch']" class="help is-danger">As senhas não
+            coincidem</p>
+    </div>
+    <div class="field is-grouped is-grouped-right">
+        <p class="control">
+            <button class="button is-success is-outlined" [routerLink]="'/login'">
+                Voltar
+            </button>
+        </p>
+        <p class="control">
+            <button class="button is-success" (click)="register()">Registrar</button>
+        </p>
+    </div>
+</form>

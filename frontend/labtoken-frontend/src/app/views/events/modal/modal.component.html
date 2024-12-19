@@ -1,0 +1,74 @@
+<div class="modal">
+    <div (click)="closeModal()" class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">{{ this.event.id ? 'Editar evento' : 'Novo evento' }}</p>
+            <button (click)="closeModal()" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <form [formGroup]="eventForm">
+                <div class="field">
+                    <label class="label">Descrição</label>
+                    <div class="control">
+                        <input [ngClass]="{ 'is-danger': submitted && form['description'].invalid }" class="input"
+                            type="text" formControlName="description" placeholder="Descrição" />
+                    </div>
+                    <p *ngIf="submitted && form['description'].errors?.['required']" class="help is-danger">Descrição é
+                        obrigatório</p>
+                </div>
+                <div class="field">
+                    <label class="label">Data e hora inicial</label>
+                    <div class="control">
+                        <input [ngClass]="{ 'is-danger': submitted && form['startTime'].invalid }" class="input"
+                            type="datetime-local" formControlName="startTime" placeholder="Data e hora inicial" />
+                    </div>
+                    <p *ngIf="submitted && form['startTime'].errors?.['required']" class="help is-danger">Campo
+                        obrigatório</p>
+                </div>
+                <div class="field">
+                    <label class="label">Data e hora final</label>
+                    <div class="control">
+                        <input [ngClass]="{ 'is-danger': submitted && form['endTime'].invalid }" class="input"
+                            type="datetime-local" formControlName="endTime" placeholder="Data e hora final" />
+                    </div>
+                    <p *ngIf="submitted && form['endTime'].errors?.['required']" class="help is-danger">Campo
+                        obrigatório</p>
+                </div>
+                <div class="field">
+                    <label class="label">Convidados</label>
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <input formControlName="invitedUsers" class="input" type="text"
+                                placeholder="Procure convidados por email">
+                        </div>
+                        <div class="control">
+                            <button (click)="inviteUser()" class="button is-success">
+                                Adicionar
+                            </button>
+                            <p *ngIf="invalidGuest" class="help is-danger">Email
+                                inválido</p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="tags">
+                <div class="field is-grouped is-grouped-multiline">
+                    <div *ngFor="let user of invitedUsers" class="control">
+                        <div class="tags has-addons">
+                            <span class="tag is-success">{{ user }}</span>
+                            <a (click)="deleteInvite(user)" class="tag is-delete"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <div class="buttons">
+                <button *ngIf="this.event.id" (click)="deleteEvent()" class="button is-danger">Excluir evento</button>
+                <button (click)="closeModal()" class="button">Cancelar</button>
+                <button (click)="handleSubmit()" class="button is-success">{{ this.event.id ? 'Atualizar evento' :
+                    'Criar evento' }}</button>
+            </div>
+        </footer>
+    </div>
+</div>

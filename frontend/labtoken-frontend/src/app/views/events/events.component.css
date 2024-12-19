@@ -1,0 +1,17 @@
+.events {
+    margin-top: 2rem;
+}
+
+.avatar {
+    background-color: #3abb81;
+    border-radius: 100%;
+    color: #fff;
+    padding: 10px 15px;
+    font-weight: 800;
+}
+
+.content {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
